@@ -11,4 +11,5 @@ private:
 public:
 	GridLoader(dealii::Triangulation<3>* triangulation);
 	void loadGridFromFile(std::string filename, std::string format);
+	void loadGeneratedExampleCubeGrid();
 };
