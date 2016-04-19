@@ -1,15 +1,16 @@
 #include <deal.II/grid/tria.h>
 #include <deal.II/grid/grid_in.h>
-
-#include <iostream>
+#include <deal.II/dofs/dof_handler.h>
 
 class GridLoader
 {
-private:
-	dealii::Triangulation<3>* triangulation_pointer;
-	std::map <std::string, dealii::GridIn<3>::Format> format_map;
 public:
 	GridLoader(dealii::Triangulation<3>* triangulation);
 	void loadGridFromFile(std::string filename, std::string format);
-	void loadGeneratedExampleCubeGrid();
+	void loadGeneratedExampleCubeGrid(dealii::DoFHandler<3>& dof_handler);
+
+private:
+	dealii::Triangulation<3>* triangulation_pointer;
+	std::map <std::string, dealii::GridIn<3>::Format> format_map;
+	void initialize_format_map();
 };

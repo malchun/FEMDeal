@@ -7,12 +7,16 @@
 #include <deal.II/grid/tria_iterator.h>
 #include <deal.II/grid/manifold_lib.h>
 #include <deal.II/grid/grid_tools.h>
+#include <deal.II/base/types.h>
 
-void initialise_format_map(std::map <std::string, dealii::GridIn<3>::Format>* format_map)
+#include <iostream>
+
+// Support function. Filling matching map between "Format" and strings
+void GridLoader::initialize_format_map()
 {
-	(*format_map)["msh"] = dealii::GridIn<3>::Format::msh;
-	(*format_map)["vtk"] = dealii::GridIn<3>::Format::vtk;
-	(*format_map)[""] = dealii::GridIn<3>::Format::Default;
+	format_map["msh"] = dealii::GridIn<3>::Format::msh;
+	format_map["vtk"] = dealii::GridIn<3>::Format::vtk;
+	format_map[""] = dealii::GridIn<3>::Format::Default;
 	return;
 }
 
@@ -22,7 +26,7 @@ GridLoader::GridLoader(dealii::Triangulation<3>* triangulation)
 {
 	std::cout << "GridLoader::GridLoader(Triangulation<3>)" << std::endl;
 	this->triangulation_pointer = triangulation;
-	initialise_format_map(&format_map);
+	initialize_format_map();
 }
 
 // Function loads grid from file if possible.
@@ -41,7 +45,7 @@ void GridLoader::loadGridFromFile(std::string filename, std::string format)
 
 // Example function of grid genration. Creates cube 10x10x10 with two materials
 // TODO make function that tooks some class with predefined function "create_grid"
-void GridLoader::loadGeneratedExampleCubeGrid()
+void GridLoader::loadGeneratedExampleCubeGrid(dealii::DoFHandler<3>& dof_handler)
 {
 	std::cout << "GridLoader::loadGeneratedExampleCubeGrid()" << std::endl;
 	const dealii::Point<3> p1(5, 5, 5),
@@ -75,6 +79,36 @@ void GridLoader::loadGeneratedExampleCubeGrid()
           	}
         }
     }
+
+    dealii::types::material_id first_domain_id = 11,
+    						   second_domain_id = 13;
+
+    std::vector<dealii::types::material_id> material_map(10);
+    for (unsigned int i = 0; i < material_map.size(); ++i) 
+    {
+      if(0 == i%2) {
+        material_map[i] = first_domain_id;
+      } else {
+        material_map[i] = second_domain_id;
+      }
+    }
+
+    for (typename dealii::Triangulation<3>::active_cell_iterator
+       cell = dof_handler.begin_active();
+       cell != dof_handler.end(); ++cell)
+    {
+      cell->set_material_id (0);
+      for (unsigned int i = 0; i < material_map.size(); ++i) 
+      {
+        if ((std::fabs(cell->center()[2]) >= i/*/2.0*/) && (std::fabs(cell->center()[2]) < (i + 1)/*/2.0*/)) 
+        {
+          cell->set_material_id (material_map[i]);
+          break;
+        }
+      }
+    }
+
+
     dealii::GridTools::partition_triangulation (1, (*triangulation_pointer));
 	return;
 }
