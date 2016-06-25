@@ -1,0 +1,5 @@
+The Finite Element Method: Linear Static and Dynamic Finite Element Analysis, T.J.R. Hughes, Dover Publications, 2000.
+
+The Finite Element Method: Its Basis and Fundamentals, O.C. Zienkiewicz, R.L. Taylor and J.Z. Zhu, Butterworth-Heinemann, 2005.
+
+A First Course in Finite Elements, J. Fish and T. Belytschko, Wiley, 2007.
