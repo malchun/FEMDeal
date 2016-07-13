@@ -2,10 +2,12 @@
 #include <deal.II/grid/grid_in.h>
 #include <deal.II/dofs/dof_handler.h>
 
-class GridLoader
+#include "Problem.h"
+
+class ProblemGenerator
 {
 public:
-	GridLoader(dealii::Triangulation<3>* triangulation);
+	ProblemGenerator(dealii::Triangulation<3>* triangulation);
 	void loadGridFromFile(std::string filename, std::string format);
 	void loadGeneratedExampleCubeGrid(dealii::DoFHandler<3>& dof_handler);
 

@@ -1,4 +1,4 @@
-#include "../include/GridLoader.h"
+#include "../include/ProblemGenerator.h"
 #include "../include/DataOutput.h"
 
 #include <deal.II/grid/tria.h>
@@ -16,9 +16,9 @@ int main()
 	dealii::DoFHandler<3> dof_handler(triangulation);
 	dealii::FESystem<3> fe(dealii::FE_Q<3>(1), 3);
 
-	GridLoader gl(&triangulation);
-	gl.loadGeneratedExampleCubeGrid(dof_handler);
-	dof_handler.distribute_dofs (fe);
+	ProblemGenerator pg(&triangulation);
+	pg.loadGeneratedExampleCubeGrid(dof_handler);
+	dof_handler.distribute_dofs(fe);
 	DataOutput dataout(&triangulation);
 	dataout.saveResultVtu("aaalolaaa", dof_handler);
 	dof_handler.clear();

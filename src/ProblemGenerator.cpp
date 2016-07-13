@@ -1,5 +1,4 @@
-#pragma once
-#include "../include/GridLoader.h"
+#include "../include/ProblemGenerator.h"
 
 #include <deal.II/grid/grid_generator.h>
 #include <deal.II/grid/grid_refinement.h>
@@ -12,7 +11,7 @@
 #include <iostream>
 
 // Support function. Filling matching map between "Format" and strings
-void GridLoader::initialize_format_map()
+void ProblemGenerator::initialize_format_map()
 {
 	format_map["msh"] = dealii::GridIn<3>::Format::msh;
 	format_map["vtk"] = dealii::GridIn<3>::Format::vtk;
@@ -22,9 +21,9 @@ void GridLoader::initialize_format_map()
 
 // Constructor.
 // @param dealii::Triangulation<3> triangulation - pointer on <3,3> triangulation
-GridLoader::GridLoader(dealii::Triangulation<3>* triangulation)
+ProblemGenerator::ProblemGenerator(dealii::Triangulation<3>* triangulation)
 {
-	std::cout << "GridLoader::GridLoader(Triangulation<3>)" << std::endl;
+	std::cout << "ProblemGenerator::ProblemGenerator(Triangulation<3>)" << std::endl;
 	this->triangulation_pointer = triangulation;
 	initialize_format_map();
 }
@@ -33,9 +32,9 @@ GridLoader::GridLoader(dealii::Triangulation<3>* triangulation)
 // Warning! deal.II doesn't work with triangual grids in any way!
 // @param string filename - name of file with grid
 // @param string format - format of grid. Possible variants are "msh" and "vtk" (could be extended)
-void GridLoader::loadGridFromFile(std::string filename, std::string format)
+void ProblemGenerator::loadGridFromFile(std::string filename, std::string format)
 {
-	std::cout << "GridLoader::loadGridFromFile(\"" << filename << "\")" << std::endl;
+	std::cout << "ProblemGenerator::loadGridFromFile(\"" << filename << "\")" << std::endl;
 	dealii::GridIn<3> grid_in;
 	grid_in.attach_triangulation (*triangulation_pointer);
 	grid_in.read(filename, format_map[format]);
@@ -45,9 +44,9 @@ void GridLoader::loadGridFromFile(std::string filename, std::string format)
 
 // Example function of grid genration. Creates cube 10x10x10 with two materials
 // TODO make function that tooks some class with predefined function "create_grid"
-void GridLoader::loadGeneratedExampleCubeGrid(dealii::DoFHandler<3>& dof_handler)
+void ProblemGenerator::loadGeneratedExampleCubeGrid(dealii::DoFHandler<3>& dof_handler)
 {
-	std::cout << "GridLoader::loadGeneratedExampleCubeGrid()" << std::endl;
+	std::cout << "ProblemGenerator::loadGeneratedExampleCubeGrid()" << std::endl;
 	const dealii::Point<3> p1(5, 5, 5),
                            p2(-5, -5, -5);
                  
